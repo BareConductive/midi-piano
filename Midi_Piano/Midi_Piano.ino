@@ -13,7 +13,6 @@
  Much thievery from Nathan Seidle in this particular sketch. Thanks Nate - 
  we owe you a cold beer!
  
- 
  This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 
  Unported License (CC BY-SA 3.0) http://creativecommons.org/licenses/by-sa/3.0/
  

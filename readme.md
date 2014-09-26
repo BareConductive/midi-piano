@@ -5,7 +5,7 @@
 On board touch-triggered MIDI synthesis using the VS1053b. Designed to run on the [Touch Board](http://www.bareconductive.com/shop/touch-board/).
 
 ## Requirements
-* [Arduino](http://arduino.cc/en/Main/Software) 1.0.5 or 1.5.6+ (1.5.6+ is strongly preferred).
+* [Arduino](http://arduino.cc/en/Main/Software) 1.5.6 or later
 
 * Arduino's instructions for installing libraries are available [here](http://arduino.cc/en/Guide/Libraries)
 
