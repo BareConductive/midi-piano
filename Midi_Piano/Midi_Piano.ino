@@ -1,13 +1,20 @@
 /*******************************************************************************
 
- Bare Conductive On Board Midi Piano
- ---------------------------------
+ Bare Conductive On Board Midi Piano (or other instrument... or drum kit!)
+ -------------------------------------------------------------------------
  
  Midi_Piano.ino - basic sketch that defines the Touch Board as a particular
- instrument when placed in Real Time MIDI mode. Soldering is required.
+ instrument when placed in onboard MIDI mode. 
 
  To do this, connect the two solder bridges with "MIDI" and "MIDI ON" printed
- next the the solder pads on the Touch Board.
+ next the the solder pads on the Touch Board. You can do this with solder or
+ using small blobs of Electric Paint.
+
+ By default, this is a 12-key keyboard with just the white notes (a diatonic 
+ scale). This can be changed to a full chromatic scale (black and white notes) 
+ or a drum kit by modifying the indicated sections in loop() (and also 
+ setupMIDI() if you want drums). You can also change this to be any instrument
+ by modifying the Melodic Instruments section of setupMIDI().
  
  Bare Conductive code written by Stefan Dzisiewski-Smith and Peter Krige. 
  Much thievery from Nathan Seidle in this particular sketch. Thanks Nate - 
@@ -34,29 +41,34 @@
 #include <Wire.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial mySerial(12, 10); //Soft TX on 10, we don't use RX in this code
+SoftwareSerial mySerial(12, 10); // Soft TX on 10, we don't use RX in this code
 
-//Touch Board Setup variables
+// Touch Board Setup variables
 #define firstPin 0
 #define lastPin 11
 
-//VS1053 setup
-byte note = 0; //The MIDI note value to be played
-byte resetMIDI = 8; //Tied to VS1053 Reset line
-byte ledPin = 13; //MIDI traffic inidicator
+// VS1053 setup
+byte note = 0; // The MIDI note value to be played
+byte resetMIDI = 8; // Tied to VS1053 Reset line
+byte ledPin = 13; // MIDI traffic inidicator
 int  instrument = 0;
 
-//key definitions
+// key definitions
 const byte whiteNotes[] = {60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81};
 const byte allNotes[] = {60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71};
+
+// if you're using this with drum sounds instead of notes, you can choose each 
+// individual drum sound from the bank shown at the bottom of this code
+// where it says "PERCUSSION INSTRUMENTS (GM1 + GM2)"
+const byte drumNotes[] = {60, 36, 41, 44, 56, 54, 58, 36, 72, 79, 76, 58};
 
 void setup(){
   Serial.begin(baudRate);
   
   // uncomment the line below if you want to see Serial data from the start
-  //while (!Serial);
+  // while (!Serial);
   
-  //Setup soft serial for MIDI control
+  // Setup soft serial for MIDI control
   mySerial.begin(31250);
   Wire.begin();
    
@@ -94,7 +106,7 @@ void setup(){
   // initial data update
   MPR121.updateTouchData();
 
-  //Reset the VS1053
+  // Reset the VS1053
   pinMode(resetMIDI, OUTPUT);
   digitalWrite(resetMIDI, LOW);
   delay(100);
@@ -116,17 +128,18 @@ void loop(){
      // mapped to the 12 electrodes, each a semitone up from the previous
      for(int i=firstPin; i<=lastPin; i++){
        
-       // you can choose how to map the notes here
+       // you can choose how to map the notes here - try replacing "whiteNotes" with
+       // "allNotes" or "drumNotes"
        note = whiteNotes[lastPin-i];
        if(MPR121.isNewTouch(i)){
-         //Note on channel 1 (0x90), some note value (note), middle velocity (0x45):
-         noteOn(0, note, 60);
+         //Note on channel 1 (0x90), some note value (note), 75% velocity (0x60):
+         noteOn(0, note, 0x60);
          Serial.print("Note ");
          Serial.print(note);
          Serial.println(" on");
        } else if(MPR121.isNewRelease(i)) {   
-         //Turn off the note with a given off/release velocity
-         noteOff(0, note, 60);  
+         // Turn off the note with a given off/release velocity
+         noteOff(0, note, 0x60);  
          Serial.print("Note ");
          Serial.print(note);
          Serial.println(" off");       
@@ -138,59 +151,62 @@ void loop(){
 // functions below are little helpers based on using the SoftwareSerial
 // as a MIDI stream input to the VS1053 - all based on stuff from Nathan Seidle
 
-//Send a MIDI note-on message.  Like pressing a piano key
-//channel ranges from 0-15
+// Send a MIDI note-on message.  Like pressing a piano key.
+// channel ranges from 0-15
 void noteOn(byte channel, byte note, byte attack_velocity) {
   talkMIDI( (0x90 | channel), note, attack_velocity);
 }
 
-//Send a MIDI note-off message.  Like releasing a piano key
+// Send a MIDI note-off message.  Like releasing a piano key.
 void noteOff(byte channel, byte note, byte release_velocity) {
   talkMIDI( (0x80 | channel), note, release_velocity);
 }
 
-//Plays a MIDI note. Doesn't check to see that cmd is greater than 127, or that data values are less than 127
+// Sends a generic MIDI message. Doesn't check to see that cmd is greater than 127, 
+// or that data values are less than 127.
 void talkMIDI(byte cmd, byte data1, byte data2) {
   digitalWrite(ledPin, HIGH);
   mySerial.write(cmd);
   mySerial.write(data1);
 
-  //Some commands only have one data byte. All cmds less than 0xBn have 2 data bytes 
-  //(sort of: http://253.ccarh.org/handout/midiprotocol/)
+  // Some commands only have one data byte. All cmds less than 0xBn have 2 data bytes 
+  // (sort of: http://253.ccarh.org/handout/midiprotocol/)
   if( (cmd & 0xF0) <= 0xB0)
     mySerial.write(data2);
 
   digitalWrite(ledPin, LOW);
 }
 
-/*SETTING UP THE INSTRUMENT:
-The below function "setupMidi()" is where the instrument bank is defined. Use the VS1053 instrument library
-below to aid you in selecting your desire instrument from within the respective instrument bank
-*/
+// SETTING UP THE INSTRUMENT:
+// The below function "setupMidi()" is where the instrument bank is defined. Use the VS1053 instrument library
+// below to aid you in selecting your desire instrument from within the respective instrument bank
+
 
 void setupMidi(){
   
-  //Volume
-  talkMIDI(0xB0, 0x07, 127); //0xB0 is channel message, set channel volume to near max (127)
+  // Volume - don't comment out this code!
+  talkMIDI(0xB0, 0x07, 127); //0xB0 is channel message, set channel volume to max (127)
   
-  //Melodic Instruments GM1
-  //To Play "Electric Piano" (5):
-  talkMIDI(0xB0, 0, 0x00); //Default bank GM1  
-  //We change the instrument by changin the middle number in  the brackets 
-  //talkMIDI(0xC0, number, 0); "number" can be any number from the melodic table below
-  talkMIDI(0xC0, 5, 0); //Set instrument number. 0xC0 is a 1 data byte command(55,0) 
-  
-  //Percussion Instruments (GM1 + GM2) uncomment the code below to use
-  // To play "Sticks" (31):
-  //talkMIDI(0xB0, 0, 0x78); //Bank select: drums
-  //talkMIDI(0xC0, 5, 0); //Set instrument number
-  //Play note on channel 1 (0x90), some note value (note), middle velocity (60):
-  //noteOn(0, 31, 60);
-  //NOTE: need to figure out how to map this... or is it the same as white keys?
+  // ---------------------------------------------------------------------------------------------------------
+  // Melodic Instruments GM1 
+  // ---------------------------------------------------------------------------------------------------------
+  // To Play "Electric Piano" (5):
+  talkMIDI(0xB0, 0, 0x00); // Default bank GM1  
+  // We change the instrument by changing the middle number in the brackets 
+  // talkMIDI(0xC0, number, 0); "number" can be any number from the melodic table below
+  talkMIDI(0xC0, 5, 0); // Set instrument number. 0xC0 is a 1 data byte command(55,0) 
+  // ---------------------------------------------------------------------------------------------------------
+  // Percussion Instruments (Drums, GM1 + GM2) 
+  // ---------------------------------------------------------------------------------------------------------  
+  // uncomment the two lines of code below to use - you will also need to comment out the two "talkMIDI" lines 
+  // of code in the Melodic Instruments section above 
+  // talkMIDI(0xB0, 0, 0x78); // Bank select: drums
+  // talkMIDI(0xC0, 0, 0); // Set a dummy instrument number
+  // ---------------------------------------------------------------------------------------------------------
   
 }
 
-/*MIDI INSTRUMENT LIBRARY: 
+/* MIDI INSTRUMENT LIBRARY: 
 
 MELODIC INSTRUMENTS (GM1) 
 When using the Melodic bank (0x79 - same as default), open chooses an instrument and the octave to map 
