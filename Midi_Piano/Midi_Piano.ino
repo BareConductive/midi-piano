@@ -33,6 +33,9 @@
 
 *******************************************************************************/
 
+// compiler error handling
+#include "Compiler_Errors.h"
+
 // serial rate
 #define baudRate 57600
 
