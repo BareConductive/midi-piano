@@ -204,11 +204,11 @@ void setupMidi(){
   // ---------------------------------------------------------------------------------------------------------
   // Melodic Instruments GM1 
   // ---------------------------------------------------------------------------------------------------------
-  // To Play "Electric Piano" (5):
+  // To Play "Electric Piano" (4):
   talkMIDI(0xB0, 0, 0x00); // Default bank GM1  
   // We change the instrument by changing the middle number in the brackets 
   // talkMIDI(0xC0, number, 0); "number" can be any number from the melodic table below
-  talkMIDI(0xC0, 5, 0); // Set instrument number. 0xC0 is a 1 data byte command(55,0) 
+  talkMIDI(0xC0, 4, 0); // Set instrument number. 0xC0 is a 1 data byte command(55,0) 
   // ---------------------------------------------------------------------------------------------------------
   // Percussion Instruments (Drums, GM1 + GM2) 
   // ---------------------------------------------------------------------------------------------------------  
@@ -227,38 +227,38 @@ When using the Melodic bank (0x79 - same as default), open chooses an instrument
 To use these instruments below change "number" in talkMIDI(0xC0, number, 0) in setupMidi()
 
 
-1   Acoustic Grand Piano       33  Acoustic Bass             65  Soprano Sax           97   Rain (FX 1)
-2   Bright Acoustic Piano      34  Electric Bass (finger)    66  Alto Sax              98   Sound Track (FX 2)
-3   Electric Grand Piano       35  Electric Bass (pick)      67  Tenor Sax             99   Crystal (FX 3)
-4   Honky-tonk Piano           36  Fretless Bass             68  Baritone Sax          100  Atmosphere (FX 4)
-5   Electric Piano 1           37  Slap Bass 1               69  Oboe                  101  Brigthness (FX 5)
-6   Electric Piano 2           38  Slap Bass 2               70  English Horn          102  Goblins (FX 6)
-7   Harpsichord                39  Synth Bass 1              71  Bassoon               103  Echoes (FX 7)
-8   Clavi                      40  Synth Bass 2              72  Clarinet              104  Sci-fi (FX 8) 
-9   Celesta                    41  Violin                    73  Piccolo               105  Sitar
-10  Glockenspiel               42  Viola                     74  Flute                 106  Banjo
-11  Music Box                  43  Cello                     75  Recorder              107  Shamisen
-12  Vibraphone                 44  Contrabass                76  Pan Flute             108  Koto
-13  Marimba                    45  Tremolo Strings           77  Blown Bottle          109  Kalimba
-14  Xylophone                  46  Pizzicato Strings         78  Shakuhachi            110  Bag Pipe
-15  Tubular Bells              47  Orchestral Harp           79  Whistle               111  Fiddle
-16  Dulcimer                   48  Trimpani                  80  Ocarina               112  Shanai
-17  Drawbar Organ              49  String Ensembles 1        81  Square Lead (Lead 1)  113  Tinkle Bell
-18  Percussive Organ           50  String Ensembles 2        82  Saw Lead (Lead)       114  Agogo
-19  Rock Organ                 51  Synth Strings 1           83  Calliope (Lead 3)     115  Pitched Percussion
-20  Church Organ               52  Synth Strings 2           84  Chiff Lead (Lead 4)   116  Woodblock
-21  Reed Organ                 53  Choir Aahs                85  Charang Lead (Lead 5) 117  Taiko
-22  Accordion                  54  Voice oohs                86  Voice Lead (Lead)     118  Melodic Tom
-23  Harmonica                  55  Synth Voice               87  Fifths Lead (Lead 7)  119  Synth Drum
-24  Tango Accordion            56  Orchestra Hit             88  Bass + Lead (Lead 8)  120  Reverse Cymbal
-25  Acoustic Guitar (nylon)    57  Trumpet                   89  New Age (Pad 1)       121  Guitar Fret Noise
-26  Acoutstic Guitar (steel)   58  Trombone                  90  Warm Pad (Pad 2)      122  Breath Noise
-27  Electric Guitar (jazz)     59  Tuba                      91  Polysynth (Pad 3)     123  Seashore 
-28  Electric Guitar (clean)    60  Muted Trumpet             92  Choir (Pad 4)         124  Bird Tweet
-29  Electric Guitar (muted)    61  French Horn               93  Bowed (Pad 5)         125  Telephone Ring
-30  Overdriven Guitar          62  Brass Section             94  Metallic (Pad 6)      126  Helicopter
-31  Distortion Guitar          63  Synth Brass 1             95  Halo (Pad 7)          127  Applause
-32  Guitar Harmonics           64  Synth Brass 2             96  Sweep (Pad 8)         128  Gunshot  
+0   Acoustic Grand Piano       32  Acoustic Bass             64  Soprano Sax           96   Rain (FX 1)
+1   Bright Acoustic Piano      33  Electric Bass (finger)    65  Alto Sax              97   Sound Track (FX 2)
+2   Electric Grand Piano       34  Electric Bass (pick)      66  Tenor Sax             98   Crystal (FX 3)
+3   Honky-tonk Piano           35  Fretless Bass             67  Baritone Sax          99   Atmosphere (FX 4)
+4   Electric Piano 1           36  Slap Bass 1               68  Oboe                  100  Brigthness (FX 5)
+5   Electric Piano 2           37  Slap Bass 2               69  English Horn          101  Goblins (FX 6)
+6   Harpsichord                38  Synth Bass 1              70  Bassoon               102  Echoes (FX 7)
+7   Clavi                      39  Synth Bass 2              71  Clarinet              103  Sci-fi (FX 8) 
+8   Celesta                    40  Violin                    72  Piccolo               104  Sitar
+9   Glockenspiel               41  Viola                     73  Flute                 105  Banjo
+10  Music Box                  42  Cello                     74  Recorder              106  Shamisen
+11  Vibraphone                 43  Contrabass                75  Pan Flute             107  Koto
+12  Marimba                    44  Tremolo Strings           76  Blown Bottle          108  Kalimba
+13  Xylophone                  45  Pizzicato Strings         77  Shakuhachi            109  Bag Pipe
+14  Tubular Bells              46  Orchestral Harp           78  Whistle               110  Fiddle
+15  Dulcimer                   47  Trimpani                  79  Ocarina               111  Shanai
+16  Drawbar Organ              48  String Ensembles 1        80  Square Lead (Lead 1)  112  Tinkle Bell
+17  Percussive Organ           49  String Ensembles 2        81  Saw Lead (Lead)       113  Agogo
+18  Rock Organ                 50  Synth Strings 1           82  Calliope (Lead 3)     114  Pitched Percussion
+19  Church Organ               51  Synth Strings 2           83  Chiff Lead (Lead 4)   115  Woodblock
+20  Reed Organ                 52  Choir Aahs                84  Charang Lead (Lead 5) 116  Taiko
+21  Accordion                  53  Voice oohs                85  Voice Lead (Lead)     117  Melodic Tom
+22  Harmonica                  54  Synth Voice               86  Fifths Lead (Lead 7)  118  Synth Drum
+23  Tango Accordion            55  Orchestra Hit             87  Bass + Lead (Lead 8)  119  Reverse Cymbal
+24  Acoustic Guitar (nylon)    56  Trumpet                   88  New Age (Pad 1)       120  Guitar Fret Noise
+25  Acoutstic Guitar (steel)   57  Trombone                  89  Warm Pad (Pad 2)      121  Breath Noise
+26  Electric Guitar (jazz)     58  Tuba                      90  Polysynth (Pad 3)     122  Seashore 
+27  Electric Guitar (clean)    59  Muted Trumpet             91  Choir (Pad 4)         123  Bird Tweet
+28  Electric Guitar (muted)    60  French Horn               92  Bowed (Pad 5)         124  Telephone Ring
+29  Overdriven Guitar          61  Brass Section             93  Metallic (Pad 6)      125  Helicopter
+30  Distortion Guitar          62  Synth Brass 1             94  Halo (Pad 7)          126  Applause
+31  Guitar Harmonics           63  Synth Brass 2             95  Sweep (Pad 8)         127  Gunshot  
 
 PERCUSSION INSTRUMENTS (GM1 + GM2)
 
