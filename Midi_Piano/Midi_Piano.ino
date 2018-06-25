@@ -84,7 +84,6 @@ void setup(){
   
   // Setup soft serial for MIDI control
   mySerial.begin(31250);
-  Wire.begin();
    
   // 0x5C is the MPR121 I2C address on the Bare Touch Board
   if(!MPR121.begin(0x5C)){ 
