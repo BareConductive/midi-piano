@@ -84,7 +84,6 @@ const uint8_t INSTRUMENT = 0;  // change instrument number according to MIDI ins
 
 void setup() {
   Serial.begin(BAUD_RATE);
-
   mySerial.begin(31250);  // setup soft serial for MIDI control
 
   if (!MPR121.begin(MPR121_ADDR)) {
@@ -127,13 +126,11 @@ void setup() {
 
   MPR121.setFFI(FFI_10);
   MPR121.setSFI(SFI_10);
-
-  pinMode(LED_BUILTIN, OUTPUT);
+  MPR121.setGlobalCDT(CDT_4US);  // reasonable for larger capacitances
+  
   digitalWrite(LED_BUILTIN, HIGH);  // switch on user LED while auto calibrating electrodes
-
-  MPR121.setGlobalCDT(CDT_4US);  // reasonable for larger capacitances at the end of long cables when using Interactive Wall Kit
-  MPR121.autoSetElectrodeCDC();  // autoset all electrode settings
-
+  delay(1000);
+  MPR121.autoSetElectrodes();  // autoset all electrode settings
   digitalWrite(LED_BUILTIN, LOW);
 
   // reset MIDI player
