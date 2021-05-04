@@ -75,11 +75,11 @@ const uint8_t MELODIC_NOTES[] = {60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71}
 const uint8_t PERCUSSION_NOTES[] = {49, 35, 57, 36, 41, 51, 43, 28, 27, 83, 76, 58};  // percussion sounds
                                                                                       // change numbers to play different percussion sounds
                                                                                       // a full overview of instruments can be found here:
-                                                                                      // http://bareconductive.com/assets/resources/MIDI%20Instruments.pdf
+                                                                                      // http://bareconductive.com/touch-board-melodic-instruments
 const bool MELODIC_INSTRUMENT = true;  // set to "false" to play percussion sounds
 const uint8_t INSTRUMENT = 0;  // change instrument number according to MIDI instrument library
                                // a full overview of instruments can be found here:
-                               // http://bareconductive.com/assets/resources/MIDI%20Instruments.pdf
+                               // http://bareconductive.com/touch-board-melodic-instruments
 
 
 void setup() {
